@@ -87,15 +87,28 @@ plot_richness(ps,color="nationality", x="nationality" ,title = "diversidad alfa2
 dev.off()
 ```
 
-1.  ¿Qué interpretas de estas gráficas?#HE home environment entorno habitual dietas normales antes
-ED dia de endoscopia 
-DI dietary intervention dieta especifica 
-para la diversidad en relacion a la nacionalidad los african american tienen una riqueza promedio menor a los africanos rurales, en cuando a shannon indica una uniformidad mayor en las muestras de african american y en cuento a simpson existe una dominancia en las muestras provenientes de african american teniendo un promedio superio a 0.8 en comabio las muestras de arfricanos rurales muestran menor dominancia con promedio menor a .8.
-para la diversidad en cuanto a la dieta, riqueza existe una riqueza promedio mayor en la dieta normal, en shanon  indican una abundancia poco equitativa aunque aumenta un poco durante la la intervencion, deacuerdo a simpson existe una dominancia de pocas especies por lo que hay baja diversidad sin embargo la dominancia disminuye un poco en la intervencion dietetica.
+1.  ¿Qué interpretas de estas gráficas?#HE home environment entorno
+    habitual dietas normales antes ED dia de endoscopia DI dietary
+    intervention dieta especifica para la diversidad en relacion a la
+    nacionalidad los african american tienen una riqueza promedio menor
+    a los africanos rurales, en cuando a shannon indica una uniformidad
+    mayor en las muestras de african american y en cuento a simpson
+    existe una dominancia en las muestras provenientes de african
+    american teniendo un promedio superio a 0.8 en comabio las muestras
+    de arfricanos rurales muestran menor dominancia con promedio menor a
+    .8. para la diversidad en cuanto a la dieta, riqueza existe una
+    riqueza promedio mayor en la dieta normal, en shanon indican una
+    abundancia poco equitativa aunque aumenta un poco durante la la
+    intervencion, deacuerdo a simpson existe una dominancia de pocas
+    especies por lo que hay baja diversidad sin embargo la dominancia
+    disminuye un poco en la intervencion dietetica.
 
-
-2.  ¿Hay diferencias notorias entre grupos?
-existe una diferencia notoria entre las muestras segun la nacionalidad esto puede observarse especialmente en indice de simpson donde la dominancia de pocas especies es notablemente mayor.En cuento a la dieta,si bien se pueden observar cambios antes y despues de la intervencion estos no son tan evidentes como lo es la nacionalidad. 
+2.  ¿Hay diferencias notorias entre grupos? existe una diferencia
+    notoria entre las muestras segun la nacionalidad esto puede
+    observarse especialmente en indice de simpson donde la dominancia de
+    pocas especies es notablemente mayor.En cuento a la dieta,si bien se
+    pueden observar cambios antes y despues de la intervencion estos no
+    son tan evidentes como lo es la nacionalidad.
 
 ------------------------------------------------------------------------
 
@@ -104,6 +117,7 @@ existe una diferencia notoria entre las muestras segun la nacionalidad esto pued
 Aplica un filtrado para quedarte solo con los géneros más abundantes
 (por ejemplo, los que tienen más del 0.1% de abundancia relativa en al
 menos 10% de las muestras).
+
 ```{r}
 filtrado_ps<- ps %>% transform_sample_counts(function (x)x/sum(x)) %>% # se transforma para tener abundancias relativas al dividir cada valor entre el total de cada muestra
   filter_taxa(function(x) mean(x>0.001) >0.1, prune = TRUE) #se filtran x>0.001 abundancia relativa mayor a 0.001 taxon, mean(x>0.001) muestras donde sea superior a 0.1 en todas las muestras
@@ -120,6 +134,7 @@ View(otu_filt)
 
 Realiza una ordención PCoA utilizando distancia Bray-Curtis. Usa
 `ordinate()` y `plot_ordination()`.
+
 ```{r}
 div_bet<- ordinate ( filtrado_ps, method = "PCoA", distance = "bray")
 View(div_bet)
@@ -131,8 +146,16 @@ dev.off()
 
 Responde:
 
--   ¿Los grupos se separan visiblemente? sí los grupos se separan notablemente deacuerdo a su nacionalidad   quedando las muestras procedientes de personas afroamericanas en la aprte superior derecha e inferior izquierda, en cambio las muestras de africa rural se ubican en la parte inferior derecha y un como arriba derecha tambien en menor proporcion abajo izquierda. 
--   ¿Qué podría estar causando esas diferencias?la abundancia y riqueza de especies entre las personas afroamericanas y africanas rurales son distintas debido a la dieta y entorno en el que se desarrollan las personas
+-   ¿Los grupos se separan visiblemente? sí los grupos se separan
+    notablemente deacuerdo a su nacionalidad quedando las muestras
+    procedientes de personas afroamericanas en la aprte superior derecha
+    e inferior izquierda, en cambio las muestras de africa rural se
+    ubican en la parte inferior derecha y un como arriba derecha tambien
+    en menor proporcion abajo izquierda.
+-   ¿Qué podría estar causando esas diferencias?la abundancia y riqueza
+    de especies entre las personas afroamericanas y africanas rurales
+    son distintas debido a la dieta y entorno en el que se desarrollan
+    las personas
 
 ------------------------------------------------------------------------
 
@@ -140,6 +163,7 @@ Responde:
 
 Crea una gráfica de abundancia-rango para observar la dominancia de
 taxones.
+
 ```{r}
 library(dplyr)
 
@@ -177,9 +201,10 @@ dev.off()
 
 Interpreta:
 
--   ¿Qué tan dominada está la comunidad por pocos taxones y cuáles son? son 2 phylum los dominantes bacterioidetes y firmicutes especialmente bacteroidetes tiene una abundancia mucho mayor
+-   ¿Qué tan dominada está la comunidad por pocos taxones y cuáles son?
+    son 2 phylum los dominantes bacterioidetes y firmicutes
+    especialmente bacteroidetes tiene una abundancia mucho mayor
 -   ¿Qué tipo de distribución parece seguir?una distribucion zipf
-
 
 ------------------------------------------------------------------------
 
@@ -189,6 +214,7 @@ Agrupa por phylum o género y grafica la composición de cada muestra como
 gráfica de barras apiladas.
 
 Puedes hacer una versión más simple con `plot_bar()`:
+
 ```{r}
 library(seriation)
 
@@ -208,14 +234,18 @@ dev.off()
 
 Comenta:
 
--   ¿Hay algún phylum que domine?los phylums dominantes es bacteroidetes y firmicutes
--   ¿Se observan diferencias entre grupos?en general todos los grupos tienen una dominancia de bacteroidetes y firmicutes y poca precencias de otros phylums como actinobacterias y proteobacterias
+-   ¿Hay algún phylum que domine?los phylums dominantes es bacteroidetes
+    y firmicutes
+-   ¿Se observan diferencias entre grupos?en general todos los grupos
+    tienen una dominancia de bacteroidetes y firmicutes y poca
+    precencias de otros phylums como actinobacterias y proteobacterias
 
 ------------------------------------------------------------------------
 
 ### Exportar resultados
 
 Exporta alguna tabla de abundancias o métricas de diversidad a CSV.
+
 ```{r}
 diversidad_a<- estimate_richness(ps, measures = c("observed", "Shannon", "Simpson"))
 write.csv(diversidad_a, file = "csv/diversidad_alfa.csv", row.names = TRUE)
@@ -238,6 +268,7 @@ gp <- GlobalPatterns
 -   Transformar a abundancias relativas (%)
 -   Subset para incluir solo muestras de: Soil, Feces, Skin
 -   Entrega el código y muestra las dimensiones del objeto resultante
+
 ```{r}
 data("GlobalPatterns")
 gp <- GlobalPatterns
@@ -263,7 +294,6 @@ print(f_sfs_sar)
 
 ```
 
-
 ### Diversidad alfa
 
 -   Calcular 3 índices de diversidad alfa (`Shannon`, `Simpson`,
@@ -271,7 +301,6 @@ print(f_sfs_sar)
 -   Crear boxplots comparativos de los índices entre tipos de muestra
 -   Realizar prueba estadística (Kruskal-Wallis) para diferencias entre
     grupos
-
 
 ```{r}
 diversidad_a<- estimate_richness(f_sfs_sar, measures = c("Observed", "Shannon", "Simpson"))
@@ -314,7 +343,9 @@ k_sha <- kruskal.test(Shannon ~ SampleType, data = diversidad_a)
 print(k_sha)
 
 ```
+
 ### Curvas de Rango-Abundancia
+
 Crear gráficas de rango-abundancia para cada tipo de muestra Usar escala
 log10 en Y Comparar patrones entre ambientes
 
@@ -330,7 +361,6 @@ ggplot(ab_tx_muestras,aes(x=reorder(OTU,-Abundance),y=Abundance, fill = Phylum, 
 dev.off
 ```
 
-
 ### Perfil taxonómico
 
 -   Crear gráfico apilado de abundancia a nivel de Phylum
@@ -339,6 +369,7 @@ dev.off
 -   Usar `facet_wrap` para comparar ambientes
 
 Incluir gráficos y comentar resultados biológicos
+
 ```{r}
 obj_f<- psmelt(f_sfs_sar)
 ab_phylum <- obj_f %>%
@@ -360,8 +391,11 @@ ggplot(obj_f_filtrado, aes(x = SampleType, y = Abundance, fill = Phylum)) +
   )
   dev.off()
 ```
-existe una mayor abundancia genral en feces la que es mayor al doble en comparacion con skin y soli, los phylums más abundantes son firmicutes y bacteroidetes en feces, firmicutes y proteobacteria en skin y proteobacteria y verrucomicrobia en soil.
-## Diversidad Beta
+
+existe una mayor abundancia genral en feces la que es mayor al doble en
+comparacion con skin y soli, los phylums más abundantes son firmicutes y
+bacteroidetes en feces, firmicutes y proteobacteria en skin y
+proteobacteria y verrucomicrobia en soil. \## Diversidad Beta
 
 -   Calcular distancia Bray-Curtis
 -   Realizar PCoA
@@ -370,6 +404,7 @@ existe una mayor abundancia genral en feces la que es mayor al doble en comparac
     -   Elipses de confianza del 95%
     -   Incluir stress plot
 -   Realizar PERMANOVA para diferencias entre grupos
+
 ```{r}
 d_b<- ordinate (f_sfs_sar, method = "PCoA", distance = "bray")
 View(d_b)
@@ -379,6 +414,7 @@ plot_ordination(f_sfs_sar, d_b, color = "SampleType") +
   stat_ellipse(aes(color = SampleType), level = 0.95)
 dev.off()
 ```
+
 ```{r}
 plot_ordination(f_sfs_sar, d_b, color = "SampleType") +
   stat_ellipse(aes(color = SampleType), level = 0.95)
@@ -398,10 +434,33 @@ Interpretar resultados en contexto ecológico
 ### Preguntas de interpretación
 
 1.  ¿Qué ambiente muestra mayor diversidad alfa? ¿A qué factores podría
-    deberse? el ambiente con mayor diversidad alfa es feces ya que tiene los valores más bajos en el indice de simpson en cambio el ambiente con menor diversidad es skin, esto puede deberse a que 
+    deberse? el ambiente con mayor diversidad alfa es feces ya que tiene
+    los valores más bajos en el indice de simpson en cambio el ambiente
+    con menor diversidad es skin, esto puede deberse a que
 2.  ¿Qué se observa en la ordenación PCoA respecto a similitudes entre
-    muestras? las muestras se ordenan naturalmente sin compartir espacios, lo que indica que los philums más dominantes en cada ambiente no estan presentes en todos ellos si no que cambian deacuerdo al ambiente
-3.  ¿Qué patrón de dominancia taxonómica muestran las curvas de rango-abundancia? existe una dominanacia en general de firmicutes, aunque el segundo phylum cambia deacuerdo al ambiente.
+    muestras? las muestras se ordenan naturalmente sin compartir
+    espacios, lo que indica que los philums más dominantes en cada
+    ambiente no estan presentes en todos ellos si no que cambian
+    deacuerdo al ambiente
+3.  ¿Qué patrón de dominancia taxonómica muestran las curvas de
+    rango-abundancia? existe una dominanacia en general de firmicutes,
+    aunque el segundo phylum cambia deacuerdo al ambiente.
 4.  ¿Qué phyla son dominantes en cada ambiente y qué implicaciones
-    ecológicas sugieren?
-existe una mayor abundancia genral en feces la que es mayor al doble en comparacion con skin y soli, los phylums más abundantes son firmicutes y bacteroidetes en feces, firmicutes y proteobacteria en skin y proteobacteria y verrucomicrobia en soil.lo que sugiere que la riqueza puede ser parecida pero la abundancia varia en relacion a el ambiente. 
+    ecológicas sugieren? existe una mayor abundancia genral en feces la
+    que es mayor al doble en comparacion con skin y soli, los phylums
+    más abundantes son firmicutes y bacteroidetes en feces, firmicutes y
+    proteobacteria en skin y proteobacteria y verrucomicrobia en soil.lo
+    que sugiere que la riqueza puede ser parecida pero la abundancia
+    varia en relacion a el ambiente.
+    
+    referencias utilizadas 
+#https://www.castrolab.org/teaching/data_analysis/intro-analisis-diversidad.html#medidas-de-riqueza-uniformidad-dominancia-diversidad-filogen%C3%A9tica-diversidad-alfa 
+#https://david-barnett.github.io/microViz/articles/web-only/phyloseq.html
+#https://www.rdocumentation.org/packages/taxa/versions/0.3.4/topics/filter_taxa
+#https://www.castrolab.org/teaching/data_analysis/intro-phyloseq.html#control-de-calidad-del-an%C3%A1lisis-de-16s
+#https://uw.pressbooks.pub/appliedmultivariatestatistics/chapter/permanova/
+#https://stackoverflow.com/questions/69860063/how-does-r-calculate-the-pca-ellipses
+#https://rpubs.com/joaquin_ar/219504
+#https://github.com/joey711/phyloseq/issues/631
+#https://www.bioconductor.org/packages/devel/bioc/vignettes/phyloseq/inst/doc/phyloseq-analysis.html
+#https://www.rdocumentation.org/packages/phyloseq/versions/1.16.2/topics/tax_glom
