@@ -453,7 +453,8 @@ Interpretar resultados en contexto ecológico
     que sugiere que la riqueza puede ser parecida pero la abundancia
     varia en relacion a el ambiente.
     
-    referencias utilizadas 
+    
+    referencias 
 #https://www.castrolab.org/teaching/data_analysis/intro-analisis-diversidad.html#medidas-de-riqueza-uniformidad-dominancia-diversidad-filogen%C3%A9tica-diversidad-alfa 
 #https://david-barnett.github.io/microViz/articles/web-only/phyloseq.html
 #https://www.rdocumentation.org/packages/taxa/versions/0.3.4/topics/filter_taxa
