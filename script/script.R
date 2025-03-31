@@ -156,3 +156,106 @@ dev.off()
 
 diversidad_a<- estimate_richness(ps, measures = c("observed", "Shannon", "Simpson"))
 write.csv(diversidad_a, file = "csv/diversidad_alfa.csv", row.names = TRUE)
+
+###  `GlobalPatterns`
+#Usaremos el dataset `GlobalPatterns` incluido en `phyloseq`. 
+#Contiene 26 muestras de diversos ambientes.
+
+data("GlobalPatterns")
+gp <- GlobalPatterns
+#filtrar
+gp_f<- gp %>% 
+  filter_taxa(function(x) sum (x>5) > 0.2 * length(x), prune =TRUE)#almenos 5 lecturas en 20%, aquellas que no cumplen se eliminan
+
+#aglomerar 
+ag<- tax_glom(gp_f, "Family")
+
+abr2<- transform_sample_counts(ag, function (x) x/ sum (x)*100)
+
+#subset
+f_sfs<- subset_samples( abr2, SampleType %in% c("Soil", "Feces", "Skin"))
+print(f_sfs)
+#sin abun relativa 
+f_sfs_sar<- subset_samples( ag, SampleType %in% c("Soil", "Feces", "Skin"))
+#dim
+print(f_sfs_sar)
+
+#- Calcular 3 índices de diversidad alfa (`Shannon`, `Simpson`, `Observed`)
+
+diversidad_a<- estimate_richness(f_sfs_sar, measures = c("Observed", "Shannon", "Simpson"))
+print(diversidad_a) #no quiere abundancias relativas
+#- Crear boxplots comparativos de los índices entre tipos de muestra
+
+library(ggplot2)
+diversidad_a$SampleType <- sample_data(f_sfs_sar)$SampleType #agregar sample type para relacionar con soli, feces y skin
+
+# Observed
+pdf("figuras/Box plot D. observada.pdf", height = 11, width =15)
+ggplot(diversidad_a, aes(x = SampleType, y = Observed, fill = SampleType)) +
+  geom_boxplot() +
+  labs(title = "Box plot D. observada")
+dev.off()
+
+pdf("figuras/Box plot D.shannon.pdf", height = 11, width =15)
+ggplot(diversidad_a, aes(x = SampleType, y = Shannon, fill = SampleType)) +
+  geom_boxplot() +
+  labs(title = "Box plot D. shannon")
+dev.off()
+
+
+pdf("figuras/Box plot D.simpson .pdf", height = 11, width =15)
+ggplot(diversidad_a, aes(x = SampleType, y = Simpson, fill = SampleType)) +
+  geom_boxplot() +
+  labs(title = "Box plot D. simpson")
+dev.off()
+
+#- Realizar prueba estadística (Kruskal-Wallis) para diferencias entre grupos
+
+k_o <- kruskal.test(Observed ~ SampleType, data = diversidad_a)
+print(k_o)
+
+
+k_si<- kruskal.test(Simpson ~ SampleType, data = diversidad_a)
+print(k_si)
+
+k_sha <- kruskal.test(Shannon ~ SampleType, data = diversidad_a)
+print(k_sha)
+
+
+### Curvas de Rango-Abundancia 
+
+#Crear gráficas de rango-abundancia para cada tipo de muestra
+#Usar escala log10 en Y
+#Comparar patrones entre ambientes
+
+obj_f<- psmelt(f_sfs_sar) #convertir de phy a data
+
+ab_tx_muestras <- aggregate(Abundance ~ OTU + Phylum ,data = obj_f, mean)
+
+ggplot(ab_tx_muestras,aes(x=reorder(OTU,-Abundance),y=Abundance, fill = Phylum, color = Phylum)) +
+  geom_point()+scale_y_log10()
+
+### Perfil taxonómico 
+
+#- Crear gráfico apilado de abundancia a nivel de Phylum
+#- Mostrar solo los 5 phyla más abundantes
+#- Agrupar por tipo de muestra
+#- Usar `facet_wrap` para comparar ambientes
+
+d_b<- ordinate (f_sfs_sar, method = "PCoA", distance = "bray")
+View(d_b)
+class(d_b)
+
+#grafica
+
+plot_ordination(f_sfs_sar, d_b, color = "SampleType") +
+  stat_ellipse(aes(color = SampleType), level = 0.95)
+dev.off()
+
+
+library(vegan)
+bray_dist <- phyloseq::distance(f_sfs_sar, method = "bray")
+md<- as(sample_data(f_sfs_sar), "data.frame")
+
+per<- adonis2(bray_dist ~ SampleType,data = md )
+print (per)
