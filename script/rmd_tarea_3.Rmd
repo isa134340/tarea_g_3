@@ -54,7 +54,7 @@ View(ab)
 ### Curvas de rarefacción
 rarecurve(ab,col = rainbow (length(ab)),  step  =  11000, cex = 0.5)
 
-pdf("figuras/curva_rarefaccion.pdf", height = 11, width =15)
+pdf("C:/6to semestre/genomica/tarea_g_3/figuras/curva_rarefaccion.pdf", height = 11, width =15)
 rarecurve(ab, col = rainbow(nrow(ab)), step = 11000, cex = 0.5)
 dev.off()
 ```
@@ -78,11 +78,11 @@ Calcula y grafica los siguientes índices de diversidad alfa:
 Usa `plot_richness()` de `phyloseq`.
 
 ```{r}
-pdf("figuras/diversidad_alfa.pdf", height = 11, width =15)
+pdf("C:/6to semestre/genomica/tarea_g_3/figuras/diversidad_alfa.pdf", height = 11, width =15)
 plot_richness(ps,color="group", x="group" ,title = "diversidad alfa", measures =c("Observed", "Shannon", "Simpson")) + geom_boxplot(aes(fill = group), alpha=.7) + scale_color_manual(values = c("#FFE1FF", "#b2df8a", "#cae1ff")) + scale_fill_manual(values = c("#FFE1FF", "#b2df8a", "#cae1ff"))
 dev.off()
 
-pdf("figuras/diversidad_alfa2.pdf", height = 11, width =15)
+pdf("C:/6to semestre/genomica/tarea_g_3/figuras/diversidad_alfa2.pdf", height = 11, width =15)
 plot_richness(ps,color="nationality", x="nationality" ,title = "diversidad alfa2", measures =c("Observed", "Shannon", "Simpson")) + geom_boxplot(aes(fill = nationality), alpha=.7) + scale_color_manual(values = c("#FFE1FF", "#b2df8a")) + scale_fill_manual(values = c("#FFE1FF", "#b2df8a"))
 dev.off()
 ```
@@ -121,10 +121,10 @@ menos 10% de las muestras).
 ```{r}
 filtrado_ps<- ps %>% transform_sample_counts(function (x)x/sum(x)) %>% # se transforma para tener abundancias relativas al dividir cada valor entre el total de cada muestra
   filter_taxa(function(x) mean(x>0.001) >0.1, prune = TRUE) #se filtran x>0.001 abundancia relativa mayor a 0.001 taxon, mean(x>0.001) muestras donde sea superior a 0.1 en todas las muestras
-View(filtrado_ps)
+filtrado_ps
 
 otu_filt<- otu_table (filtrado_ps)
-View(otu_filt)
+otu_filt
 
 ```
 
@@ -137,9 +137,9 @@ Realiza una ordención PCoA utilizando distancia Bray-Curtis. Usa
 
 ```{r}
 div_bet<- ordinate ( filtrado_ps, method = "PCoA", distance = "bray")
-View(div_bet)
+div_bet
 
-pdf("figuras/ordenacion.pdf", height = 11, width =15)
+pdf("C:/6to semestre/genomica/tarea_g_3/figuras/ordenacion.pdf", height = 11, width =15)
 plot_ordination(filtrado_ps, div_bet, color = "nationality" )
 dev.off()
 ```
@@ -174,7 +174,7 @@ obj_f<- psmelt(filtrado_ps) #hacer un obj
 ab_tx<- aggregate(Abundance ~ OTU + Phylum, data = obj_f, mean) #calcualr media para cada tax
 
 #grafica 
-pdf("figuras/Rank_abundance_puntos.pdf", height = 11, width =15)
+pdf("C:/6to semestre/genomica/tarea_g_3/figuras/Rank_abundance_puntos.pdf", height = 11, width =15)
 ggplot(ab_tx, aes(x = reorder(OTU, -Abundance), y = Abundance)) +
   geom_point(aes(color = Phylum), size = 3) +
   theme(axis.ticks = element_blank(), axis.text.x = element_blank()) +
@@ -186,7 +186,7 @@ ggplot(ab_tx, aes(x = reorder(OTU, -Abundance), y = Abundance)) +
     fill = "Phylum")
 dev.off()
 
-pdf("figuras/Rank_abundance_barras.pdf", height = 11, width =15)
+pdf("C:/6to semestre/genomica/tarea_g_3/figuras/Rank_abundance_barras.pdf", height = 11, width =15)
 ggplot(ab_tx, aes(x = reorder(OTU, -Abundance), y = Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", alpha = 0.8) + 
   labs(
@@ -225,7 +225,7 @@ tax_glom("Phylum")  #agurpamos por phylum
 part_ps <- tax_glom(filtrado_ps, "Phylum")
 da_m<- psmelt(part_ps)
 
-pdf("figuras/Gráficas_apiladas_de_abundancia.pdf", height = 11, width =15)
+pdf("C:/6to semestre/genomica/tarea_g_3/figuras/Gráficas_apiladas_de_abundancia.pdf", height = 11, width =15)
 ggplot(da_m, aes(x=Sample, y=Abundance, fill= Phylum))+  
   geom_bar(stat = "identity", position = "stack")+
   labs(title ="grafica apilada de abundancia", x="muestra", y="abundancia", fill= "Phylum" )
@@ -248,7 +248,7 @@ Exporta alguna tabla de abundancias o métricas de diversidad a CSV.
 
 ```{r}
 diversidad_a<- estimate_richness(ps, measures = c("observed", "Shannon", "Simpson"))
-write.csv(diversidad_a, file = "csv/diversidad_alfa.csv", row.names = TRUE)
+write.csv(diversidad_a, file = "C:/6to semestre/genomica/tarea_g_3/csv/diversidad_alfa.csv", row.names = TRUE)
 ```
 
 ## `GlobalPatterns`
@@ -407,7 +407,7 @@ proteobacteria y verrucomicrobia en soil. \## Diversidad Beta
 
 ```{r}
 d_b<- ordinate (f_sfs_sar, method = "PCoA", distance = "bray")
-View(d_b)
+d_b
 #grafica
 pdf("C:/6to semestre/genomica/tarea_g_3/figuras/PCoA.pdf", height = 11, width = 15)
 plot_ordination(f_sfs_sar, d_b, color = "SampleType") +
